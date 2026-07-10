@@ -1,0 +1,12 @@
+{
+  "name": "The GOAT Gamble",
+  "short_name": "GOAT Gamble",
+  "description": "Five free browser games — Chess, Connect Four, Blackjack, Tri-D Chess and Neon Dash.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f131c",
+  "theme_color": "#161c28",
+  "icons": [
+    {"src": "icons/chess.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}
