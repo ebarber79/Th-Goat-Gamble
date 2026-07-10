@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://thegoatgamble.com/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <style>
-  :root{--light:#f0d9b5;--dark:#b58863;--sq:62px;
+  :root{--light:#f0d9b5;--dark:#b58863;--sq:min(62px,calc((100vw - 44px)/8));
         --sel:#f7ec74;--tgt:rgba(30,120,40,.5);--last:rgba(255,225,60,.45);}
   *{box-sizing:border-box}
   body{margin:0;background:#1d2330;color:#e7ecf5;font-family:"Segoe UI",system-ui,sans-serif;
@@ -37,7 +37,7 @@
   #board{display:grid;grid-template-columns:repeat(8,var(--sq));grid-template-rows:repeat(8,var(--sq));
          border:4px solid #11161f;border-radius:4px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
   .sq{display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;
-      font-size:44px;line-height:1;user-select:none}
+      font-size:calc(var(--sq)*.71);line-height:1;user-select:none}
   .sq.light{background:var(--light)} .sq.dark{background:var(--dark)}
   .sq.sel{box-shadow:inset 0 0 0 4px var(--sel)}
   .sq.last::before{content:"";position:absolute;inset:0;background:var(--last)}
@@ -80,6 +80,12 @@
   #help{max-width:540px;color:#9fb0c8;font-size:12.5px;line-height:1.5;margin-top:16px;
         background:#262f40;padding:12px 16px;border-radius:10px}
   #help b{color:#cdd8ea}
+  /* mobile: stack the info panel under the board so nothing overflows sideways */
+  @media(max-width:560px){
+    #wrap{flex-direction:column;align-items:center;gap:12px;width:100%}
+    #side-panel{min-width:0;width:100%;max-width:calc(var(--sq)*8 + 8px)}
+    #movelist{max-height:120px}
+  }
 </style>
 </head>
 <body>
