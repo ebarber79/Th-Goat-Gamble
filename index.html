@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#161c28">
+
+<title>The GOAT Gamble — Free Browser Games (Chess, Blackjack, Connect Four & more)</title>
+<meta name="description" content="Play free browser games at The GOAT Gamble — Chess, Connect Four, Blackjack, Tri-D Chess and Neon Dash. No sign-up, no downloads, works on any phone or desktop.">
+<link rel="canonical" href="https://thegoatgamble.com/">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The GOAT Gamble">
+<meta property="og:title" content="The GOAT Gamble — Free Browser Games">
+<meta property="og:description" content="Five free games playable right in your browser — Chess, Connect Four, Blackjack, Tri-D Chess and Neon Dash. No sign-up, no downloads.">
+<meta property="og:url" content="https://thegoatgamble.com/">
+<meta property="og:image" content="https://thegoatgamble.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The GOAT Gamble — Free Browser Games">
+<meta name="twitter:description" content="Five free games, no sign-up, playable right in your browser.">
+<meta name="twitter:image" content="https://thegoatgamble.com/og.png">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%90%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icons/chess.png">
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "The GOAT Gamble",
+  "url": "https://thegoatgamble.com/",
+  "description": "Free browser games — Chess, Connect Four, Blackjack, Tri-D Chess and Neon Dash.",
+  "hasPart": [
+    {"@type": "VideoGame", "name": "Chess", "url": "https://thegoatgamble.com/chess.html", "genre": "Strategy", "playMode": "SinglePlayer", "applicationCategory": "Game"},
+    {"@type": "VideoGame", "name": "Connect Four", "url": "https://thegoatgamble.com/connect_four.html", "genre": "Strategy", "playMode": "SinglePlayer", "applicationCategory": "Game"},
+    {"@type": "VideoGame", "name": "Blackjack", "url": "https://thegoatgamble.com/blackjack.html", "genre": "Card", "playMode": "SinglePlayer", "applicationCategory": "Game"},
+    {"@type": "VideoGame", "name": "Tri-D Chess", "url": "https://thegoatgamble.com/tri_d_chess.html", "genre": "Strategy", "playMode": "SinglePlayer", "applicationCategory": "Game"},
+    {"@type": "VideoGame", "name": "Neon Dash", "url": "https://ebarber79.github.io/license.md/", "genre": "Arcade", "playMode": "SinglePlayer", "applicationCategory": "Game"}
+  ]
+}
+</script>
+
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{background:radial-gradient(120% 80% at 50% 0%,#1d2535 0%,#161c28 55%,#0f131c 100%);
+       color:#e7ecf5;font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+       min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:26px 16px 36px}
+  h1{margin:0;font-size:32px;font-weight:800;letter-spacing:1px;text-align:center}
+  h1 .a{color:#5aa9e6} h1 .b{color:#e9c46a}
+  .sub{color:#9fb0c8;font-size:13.5px;margin:8px 0 24px;text-align:center;max-width:460px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;width:100%;max-width:520px}
+  @media(max-width:380px){.grid{grid-template-columns:1fr}}
+  .card{display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;color:inherit;
+        background:#222c3e;border:1px solid #33405a;border-radius:16px;padding:20px 14px;
+        transition:transform .12s,border-color .12s,background .12s;position:relative}
+  .card:hover{transform:translateY(-3px);border-color:#5aa9e6;background:#27344a}
+  .card:active{transform:translateY(0)}
+  .card:focus-visible{outline:2px solid #5aa9e6;outline-offset:2px}
+  .card img{width:72px;height:72px;border-radius:14px;object-fit:cover;box-shadow:0 4px 12px rgba(0,0,0,.45)}
+  .card .name{font-size:16px;font-weight:800}
+  .card .desc{font-size:11.5px;color:#9fb0c8;text-align:center;line-height:1.35}
+  .tag{position:absolute;top:10px;right:10px;font-size:9.5px;font-weight:800;letter-spacing:.5px;
+       color:#0f131c;background:#e9c46a;border-radius:6px;padding:2px 6px}
+  .qrbox{margin-top:30px;background:#222c3e;border:1px solid #33405a;border-radius:16px;
+         padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;max-width:300px;width:100%}
+  .qrbox h2{margin:0;font-size:15px} .qrbox p{margin:0;font-size:12px;color:#9fb0c8;text-align:center}
+  .qrbox img{width:180px;height:180px;background:#fff;border-radius:12px;padding:8px}
+  .qrbox .url{font-family:Consolas,monospace;font-size:12px;color:#e9c46a}
+  footer{margin-top:24px;color:#6b7a93;font-size:11px;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+  <h1>🐐 <span class="a">The GOAT</span> <span class="b">Gamble</span></h1>
+  <div class="sub">Five free games, playable right in your browser — no sign-up, no downloads. Tap one to start.</div>
+
+  <main class="grid">
+    <a class="card" href="chess.html">
+      <img src="icons/chess.png" alt="Chess" width="72" height="72">
+      <span class="name">♟️ Chess</span>
+      <span class="desc">Full rules vs. computer (3 levels) or 2-player. Clock, sound, perft-verified.</span>
+    </a>
+    <a class="card" href="connect_four.html">
+      <img src="icons/connect_four.png" alt="Connect Four" width="72" height="72">
+      <span class="name">🔴 Connect Four</span>
+      <span class="desc">Tap a column to drop. Alpha-beta AI, three difficulties, scoreboard.</span>
+    </a>
+    <a class="card" href="blackjack.html">
+      <img src="icons/blackjack.png" alt="Blackjack" width="72" height="72">
+      <span class="name">🃏 Blackjack</span>
+      <span class="desc">6-deck shoe, 3:2 payouts, split &amp; double, built-in strategy coach.</span>
+    </a>
+    <a class="card" href="tri_d_chess.html">
+      <img src="icons/tri_d_chess.png" alt="Tri-D Chess" width="72" height="72">
+      <span class="name">🧊 Tri-D Chess</span>
+      <span class="desc">Star-Trek-style 3D chess on stacked boards + movable attack boards.</span>
+    </a>
+    <a class="card" href="https://ebarber79.github.io/license.md/" target="_blank" rel="noopener">
+      <span class="tag">NEW</span>
+      <img src="icons/neon_dash.svg" alt="Neon Dash" width="72" height="72">
+      <span class="name">⚡ Neon Dash</span>
+      <span class="desc">Neon endless runner — jump &amp; dash, bank your gems. Also a mobile app.</span>
+    </a>
+  </main>
+
+  <div class="qrbox">
+    <h2>📱 Open on your phone</h2>
+    <p>Scan to play any of these on your phone — then Add to Home Screen.</p>
+    <img src="qr.png" alt="QR code linking to thegoatgamble.com" width="180" height="180">
+    <span class="url" id="url">thegoatgamble.com</span>
+  </div>
+
+  <footer>The GOAT Gamble · single-file browser games · built with Claude Code</footer>
+  <script>document.getElementById('url').textContent=location.host||'thegoatgamble.com';</script>
+</body>
+</html>

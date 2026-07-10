@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#1b2330">
+<title>Connect Four</title>
+<style>
+  :root{
+    --bg:#161c28; --panel:#222c3e; --line:#33405a; --txt:#e7ecf5; --dim:#9fb0c8;
+    --board:#2552c9; --boardhi:#3768e0; --hole:#0e1422;
+    --red:#e5484d; --yellow:#f2c037; --redg:#ff6b6f; --yellowg:#ffd95a;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--txt);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+       min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;
+       padding:12px 10px;overflow-x:hidden}
+  h1{margin:0;font-size:21px;letter-spacing:1px;font-weight:800}
+  h1 .b{color:#5aa9e6} h1 .y{color:var(--yellow)}
+  .sub{color:var(--dim);font-size:11.5px;margin:2px 0 10px;text-align:center}
+  .topbar{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;width:100%;max-width:520px;margin-bottom:10px}
+  .pill{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700;display:flex;gap:6px;align-items:center}
+  .pill .lbl{color:var(--dim);font-weight:600;font-size:11px}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block;vertical-align:-1px}
+  .dot.r{background:var(--red)} .dot.y{background:var(--yellow)}
+  .iconbtn{background:var(--panel);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 11px;font:inherit;font-size:13px;cursor:pointer}
+  .iconbtn:active{background:var(--line)}
+
+  #msg{min-height:22px;font-size:15px;font-weight:700;text-align:center;margin:2px 0 8px}
+  #msg .win{color:#7be08a} #msg .lose{color:var(--red)} #msg .draw{color:var(--yellow)}
+
+  #boardwrap{background:var(--board);border-radius:16px;padding:clamp(7px,2.2vw,12px);
+             box-shadow:0 12px 30px rgba(0,0,0,.5);transition:background .12s;touch-action:manipulation}
+  #board{display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(5px,1.8vw,9px)}
+  .cell{width:clamp(38px,12.2vw,58px);aspect-ratio:1;background:var(--hole);border-radius:50%;
+        position:relative;cursor:pointer}
+  .col-hi{background:var(--boardhi)}
+  .disc{position:absolute;inset:6%;border-radius:50%;}
+  .disc.r{background:radial-gradient(circle at 35% 30%,var(--redg),var(--red) 70%);box-shadow:inset 0 -3px 6px rgba(0,0,0,.35)}
+  .disc.y{background:radial-gradient(circle at 35% 30%,var(--yellowg),var(--yellow) 70%);box-shadow:inset 0 -3px 6px rgba(0,0,0,.3)}
+  .disc.drop{animation:drop .32s cubic-bezier(.34,1.2,.64,1) both}
+  @keyframes drop{from{transform:translateY(-460%)}to{transform:none}}
+  .cell.win .disc{animation:pulse .7s ease-in-out infinite alternate}
+  @keyframes pulse{from{box-shadow:0 0 0 0 rgba(255,255,255,.15)}to{box-shadow:0 0 0 5px rgba(255,255,255,.85)}}
+
+  #controls{margin-top:14px;width:100%;max-width:520px;display:flex;justify-content:center}
+  .act{min-height:50px;border:none;border-radius:12px;font:inherit;font-size:16px;font-weight:800;
+       color:#0c1118;cursor:pointer;padding:0 28px}
+  .act.again{background:#5aa9e6}
+  .act:active{transform:translateY(1px)}
+
+  /* difficulty modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+  .modal.show{display:flex}
+  .sheet{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;max-width:340px;width:100%;text-align:center}
+  .sheet h2{margin:0 0 4px;font-size:19px}
+  .sheet p{color:var(--dim);font-size:12.5px;margin:0 0 16px}
+  .diff{display:block;width:100%;margin:8px 0;min-height:54px;border:1px solid var(--line);border-radius:12px;
+        background:#1b2230;color:var(--txt);font:inherit;font-size:16px;font-weight:800;cursor:pointer;text-align:left;padding:0 16px}
+  .diff:active{background:var(--board)}
+  .diff small{display:block;font-size:11.5px;font-weight:500;color:var(--dim);margin-top:2px}
+</style>
+</head>
+<body>
+  <h1><span class="b">Connect</span> <span class="y">Four</span></h1>
+  <div class="sub">Tap a column to drop. Line up four to win.</div>
+
+  <div class="topbar">
+    <div class="pill"><span class="lbl">You</span><span class="dot r"></span><span id="wins">0</span></div>
+    <div class="pill"><span class="lbl">AI</span><span class="dot y"></span><span id="losses">0</span></div>
+    <div class="pill"><span class="lbl">Draws</span><span id="draws">0</span></div>
+    <div class="pill" id="diffPill"><span class="lbl">Level</span><span id="diffName">—</span></div>
+    <button class="iconbtn" id="newBtn">Change</button>
+    <button class="iconbtn" id="shareBtn">📱 Share</button>
+  </div>
+
+  <div id="msg">Choose a difficulty to start.</div>
+
+  <div id="boardwrap"><div id="board"></div></div>
+
+  <div id="controls"></div>
+
+  <div class="modal" id="shareModal">
+    <div class="sheet" style="text-align:center">
+      <h2>Scan to play Connect Four</h2>
+      <img src="qr_connect_four.png" alt="QR code for Connect Four" style="width:210px;height:210px;background:#fff;border-radius:12px;padding:8px">
+      <p style="color:var(--dim);font-size:12px;margin:8px 0 0">cic-game-arcade.netlify.app/connect_four.html</p>
+      <button class="diff" id="closeShare" style="text-align:center;min-height:46px">Close</button>
+    </div>
+  </div>
+
+  <div class="modal show" id="diffModal">
+    <div class="sheet">
+      <h2>Connect Four</h2>
+      <p>Pick how far ahead the AI thinks.</p>
+      <button class="diff" data-d="2">Easy<small>AI looks 2 moves ahead</small></button>
+      <button class="diff" data-d="4">Medium<small>4 moves ahead</small></button>
+      <button class="diff" data-d="6">Hard<small>6 moves ahead — blocks &amp; sets traps</small></button>
+    </div>
+  </div>
+
+<script>
+"use strict";
+const ROWS=6,COLS=7,EMPTY=0,HUMAN=1,AI=2,INF=1e9;
+let board,turn,depth,diffName="",busy=false,over=false,humanFirst=true;
+let wins=0,losses=0,draws=0;
+const $=id=>document.getElementById(id);
+
+// ── board mechanics (row 0 = bottom) ──
+const newBoard=()=>Array.from({length:ROWS},()=>Array(COLS).fill(EMPTY));
+const validCols=b=>{const o=[];for(let c=0;c<COLS;c++)if(b[ROWS-1][c]===EMPTY)o.push(c);return o;};
+function nextRow(b,c){for(let r=0;r<ROWS;r++)if(b[r][c]===EMPTY)return r;return -1;}
+function drop(b,c,p){const r=nextRow(b,c);if(r>=0)b[r][c]=p;return r;}
+function winningCells(b,p){
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    const dirs=[];
+    if(c+3<COLS)dirs.push([[r,c],[r,c+1],[r,c+2],[r,c+3]]);
+    if(r+3<ROWS)dirs.push([[r,c],[r+1,c],[r+2,c],[r+3,c]]);
+    if(r+3<ROWS&&c+3<COLS)dirs.push([[r,c],[r+1,c+1],[r+2,c+2],[r+3,c+3]]);
+    if(r+3<ROWS&&c-3>=0)dirs.push([[r,c],[r+1,c-1],[r+2,c-2],[r+3,c-3]]);
+    for(const line of dirs)if(line.every(([rr,cc])=>b[rr][cc]===p))return line;
+  }
+  return null;
+}
+const isDraw=b=>validCols(b).length===0&&!winningCells(b,HUMAN)&&!winningCells(b,AI);
+
+// ── AI: alpha-beta minimax ──
+function scoreWindow(w,p){const opp=p===AI?HUMAN:AI;
+  let pc=0,e=0,o=0;for(const v of w){if(v===p)pc++;else if(v===EMPTY)e++;else if(v===opp)o++;}
+  if(pc===4)return 100;if(pc===3&&e===1)return 6;if(pc===2&&e===2)return 3;if(o===3&&e===1)return -8;return 0;}
+function scorePosition(b,p){let s=0;
+  let center=0;for(let r=0;r<ROWS;r++)if(b[r][3]===p)center++;s+=center*4;
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    if(c+3<COLS)s+=scoreWindow([b[r][c],b[r][c+1],b[r][c+2],b[r][c+3]],p);
+    if(r+3<ROWS)s+=scoreWindow([b[r][c],b[r+1][c],b[r+2][c],b[r+3][c]],p);
+    if(r+3<ROWS&&c+3<COLS)s+=scoreWindow([b[r][c],b[r+1][c+1],b[r+2][c+2],b[r+3][c+3]],p);
+    if(r+3<ROWS&&c-3>=0)s+=scoreWindow([b[r][c],b[r+1][c-1],b[r+2][c-2],b[r+3][c-3]],p);
+  }
+  return s;}
+function minimax(b,d,alpha,beta,maxing){
+  if(winningCells(b,AI))return[null,1e6+d];
+  if(winningCells(b,HUMAN))return[null,-1e6-d];
+  let moves=validCols(b);
+  if(!moves.length)return[null,0];
+  if(d===0)return[null,scorePosition(b,AI)];
+  moves.sort((a,b2)=>Math.abs(a-3)-Math.abs(b2-3));
+  if(maxing){let best=-INF,bc=moves[0];
+    for(const col of moves){const ch=b.map(r=>r.slice());drop(ch,col,AI);
+      const[,s]=minimax(ch,d-1,alpha,beta,false);if(s>best){best=s;bc=col;}alpha=Math.max(alpha,s);if(alpha>=beta)break;}
+    return[bc,best];}
+  else{let best=INF,bc=moves[0];
+    for(const col of moves){const ch=b.map(r=>r.slice());drop(ch,col,HUMAN);
+      const[,s]=minimax(ch,d-1,alpha,beta,true);if(s<best){best=s;bc=col;}beta=Math.min(beta,s);if(alpha>=beta)break;}
+    return[bc,best];}
+}
+function aiMove(){const[col]=minimax(board,depth,-INF,INF,true);
+  return col!=null?col:validCols(board)[Math.floor(Math.random()*validCols(board).length)];}
+
+// ── render ──
+function buildGrid(){
+  const g=$("board");g.innerHTML="";
+  // top row first (r = ROWS-1 down to 0)
+  for(let r=ROWS-1;r>=0;r--)for(let c=0;c<COLS;c++){
+    const cell=document.createElement("div");cell.className="cell";cell.dataset.r=r;cell.dataset.c=c;
+    cell.appendChild(Object.assign(document.createElement("div"),{className:"disc"}));
+    cell.addEventListener("click",()=>onColumn(c));
+    cell.addEventListener("mouseenter",()=>highlightCol(c,true));
+    cell.addEventListener("mouseleave",()=>highlightCol(c,false));
+    g.appendChild(cell);
+  }
+  paint();
+}
+function cellAt(r,c){return $("board").querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);}
+function highlightCol(c,on){if(busy||over)return;
+  for(let r=0;r<ROWS;r++)cellAt(r,c).classList.toggle("col-hi",on&&board[r][c]===EMPTY);}
+function paint(winLine){
+  const wl=new Set((winLine||[]).map(([r,c])=>r+","+c));
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    const cell=cellAt(r,c),disc=cell.firstChild,v=board[r][c];
+    disc.className="disc"+(v===HUMAN?" r":v===AI?" y":"");
+    cell.classList.toggle("win",wl.has(r+","+c));
+    cell.classList.remove("col-hi");
+  }
+}
+function placeDisc(r,c,p){const cell=cellAt(r,c),disc=cell.firstChild;
+  disc.className="disc "+(p===HUMAN?"r":"y")+" drop";}
+
+// ── flow ──
+function startGame(d,name){
+  depth=d;diffName=name;$("diffName").textContent=name;
+  board=newBoard();over=false;busy=false;
+  turn=humanFirst?HUMAN:AI;
+  $("controls").innerHTML="";
+  buildGrid();
+  $("diffModal").classList.remove("show");
+  if(turn===HUMAN){setMsg((humanFirst?"You":"AI")+" first — your move.");}
+  else{setMsg("AI moves first…");busy=true;setTimeout(aiTurn,350);}
+}
+function setMsg(html){$("msg").innerHTML=html;}
+function onColumn(c){
+  if(busy||over||turn!==HUMAN)return;
+  if(board[ROWS-1][c]!==EMPTY)return; // full
+  const r=drop(board,c,HUMAN);placeDisc(r,c,HUMAN);
+  if(finishIfDone(HUMAN))return;
+  turn=AI;busy=true;setMsg('<span class="dot y"></span> AI is thinking…');
+  setTimeout(aiTurn,260);
+}
+function aiTurn(){
+  const c=aiMove();const r=drop(board,c,AI);placeDisc(r,c,AI);
+  if(finishIfDone(AI))return;
+  turn=HUMAN;busy=false;setMsg("Your move.");
+}
+function finishIfDone(who){
+  const win=winningCells(board,who);
+  if(win){paint(win);over=true;busy=true;
+    if(who===HUMAN){wins++;setMsg('<span class="win">🎉 You win! Four in a row.</span>');}
+    else{losses++;setMsg('<span class="lose">AI wins this one.</span>');}
+    endGame();updateScore();return true;}
+  if(isDraw(board)){over=true;busy=true;draws++;setMsg('<span class="draw">Draw — board full.</span>');endGame();updateScore();return true;}
+  return false;
+}
+function endGame(){
+  humanFirst=!humanFirst; // alternate starter
+  $("controls").innerHTML=`<button class="act again" id="again">PLAY AGAIN</button>`;
+  $("again").onclick=()=>startGame(depth,diffName);
+}
+function updateScore(){$("wins").textContent=wins;$("losses").textContent=losses;$("draws").textContent=draws;}
+
+// ── difficulty selection ──
+const DIFF={2:"Easy",4:"Medium",6:"Hard"};
+document.querySelectorAll(".diff").forEach(btn=>btn.onclick=()=>{
+  const d=+btn.dataset.d;startGame(d,DIFF[d]);
+});
+$("newBtn").onclick=()=>{$("diffModal").classList.add("show");};
+$("shareBtn").onclick=()=>$("shareModal").classList.add("show");
+$("closeShare").onclick=()=>$("shareModal").classList.remove("show");
+$("shareModal").onclick=e=>{if(e.target===$("shareModal"))$("shareModal").classList.remove("show");};
+
+// initial empty grid behind the modal
+board=newBoard();buildGrid();
+</script>
+</body>
+</html>
