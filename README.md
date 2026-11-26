@@ -10,7 +10,7 @@ browser games, playable with no sign-up and no downloads. Static site, deployed 
 | ♟️ Chess | `chess.html` | Full standard rules vs. a 3-level computer or 2-player hotseat. Clock, sound, captured-pieces tray; move generation is perft-verified. |
 | 🔴 Connect Four | `connect_four.html` | Drop discs vs. an alpha-beta AI with three difficulties and a match scoreboard. |
 | 🃏 Blackjack | `blackjack.html` | 6-deck shoe, 3:2 payouts, split & double, with a built-in basic-strategy coach. |
-| ⚡ Neon Dash | [external](https://ebarber79.github.io/license.md/) | Neon endless runner — jump & dash, bank your gems. Also ships as a mobile app. |
+| ⚡ Neon Dash | [external](https://neondash.gridlas.com/) | Neon endless runner — jump & dash, bank your gems. |
 
 Each game is a **single self-contained HTML file** — no build step, no external/CDN
 dependencies, so they run offline and can be added to a phone's home screen.
